@@ -95,6 +95,30 @@ a{color:var(--blue);text-decoration:none}
 .pdf-btn.part2{background:var(--orange);color:#fff}
 .pdf-btn.part2:hover{background:#ea6c00;box-shadow:0 3px 10px rgba(249,115,22,.38);color:#fff}
 
+/* quiz */
+.quiz-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:10px;background:var(--green-soft);color:var(--green);border:1.5px solid var(--green);font-size:11px;font-weight:800;letter-spacing:.2px;cursor:pointer;font-family:inherit;transition:all .13s}
+.quiz-btn:hover{background:var(--green);color:#fff;box-shadow:0 3px 10px rgba(21,128,61,.3)}
+.quiz-btn svg{width:12px;height:12px;flex-shrink:0}
+.qz-overlay{position:absolute;inset:0;background:rgba(26,26,46,.45);z-index:5000;display:flex;align-items:flex-start;justify-content:center}
+.qz-modal{background:var(--surface);border-radius:var(--r);max-width:420px;width:calc(100% - 32px);margin-top:70px;padding:20px;box-shadow:0 12px 40px rgba(26,26,46,.25);font-family:'Nunito',system-ui,sans-serif}
+.qz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.qz-chapter{font-size:14px;font-weight:900;color:var(--ink)}
+.qz-close{background:none;border:none;font-size:22px;line-height:1;color:var(--ink-3);cursor:pointer;padding:2px 6px}
+.qz-prog{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.qz-q{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:14px;line-height:1.4}
+.qz-opts{display:flex;flex-direction:column;gap:8px}
+.qz-opt{text-align:left;padding:10px 14px;border-radius:var(--r-sm);border:2px solid var(--border);background:var(--surface);font-size:13px;font-weight:700;color:var(--ink-2);cursor:pointer;font-family:inherit;transition:all .12s}
+.qz-opt:hover{border-color:var(--blue)}
+.qz-opt.correct{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+.qz-opt.wrong{border-color:#DC2626;background:#FEF2F2;color:#DC2626}
+.qz-opt:disabled{cursor:default}
+.qz-next{margin-top:14px;width:100%;padding:10px;border-radius:var(--r-sm);background:var(--blue);color:#fff;font-size:13px;font-weight:800;border:none;cursor:pointer;font-family:inherit}
+.qz-next:hover{background:var(--blue-hover)}
+.qz-score{text-align:center;padding:10px 0 4px}
+.qz-score-emoji{font-size:44px;margin-bottom:8px}
+.qz-score-big{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:4px}
+.qz-score-msg{font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:16px}
+
 /* empty */
 .empty{text-align:center;padding:44px 16px;color:var(--ink-3)}
 .empty .ei{font-size:42px;margin-bottom:10px}
@@ -190,6 +214,7 @@ const SUBJ_META = {
   Biology:{icon:'🧬',label:'Biology'},
   Hindi:{icon:'अ',label:'Hindi'},
 };
+const QUIZ = {"1|ICSE|Mathematics|pre number concepts":[{"q":"Which ball is BIG?","o":["A tiny marble","A football","A pea","A button"],"a":1},{"q":"The bird is flying ___ the tree.","o":["above","inside","under the ground","behind the water"],"a":0},{"q":"Which group has MORE apples: 🍎🍎🍎 or 🍎?","o":["🍎🍎🍎","🍎","Both are same","Cannot say"],"a":0}],"1|ICSE|Mathematics|numbers 1-9":[{"q":"How many stars? ⭐⭐⭐⭐","o":["3","4","5","2"],"a":1},{"q":"What comes after 6?","o":["5","8","7","9"],"a":2},{"q":"Which number is the smallest?","o":["9","4","1","7"],"a":2}],"1|ICSE|Mathematics|number sense":[{"q":"What comes between 3 and 5?","o":["2","4","6","7"],"a":1},{"q":"Which is greater: 8 or 5?","o":["8","5","Both equal","Cannot say"],"a":0},{"q":"Count backwards: 5, 4, 3, ___","o":["1","6","2","0"],"a":2}],"1|ICSE|Mathematics|shapes":[{"q":"How many sides does a triangle have?","o":["2","3","4","5"],"a":1},{"q":"A ball looks like which shape?","o":["Square","Circle","Triangle","Rectangle"],"a":1},{"q":"Which shape has 4 equal sides?","o":["Rectangle","Circle","Square","Triangle"],"a":2}],"1|ICSE|Mathematics|Addition":[{"q":"2 + 3 = ?","o":["4","5","6","3"],"a":1},{"q":"You have 4 sweets and get 2 more. How many now?","o":["5","7","6","4"],"a":2},{"q":"1 + 0 = ?","o":["0","1","2","10"],"a":1}],"1|ICSE|Mathematics|Subtraction":[{"q":"5 - 2 = ?","o":["2","3","4","7"],"a":1},{"q":"There are 6 birds. 3 fly away. How many are left?","o":["3","4","2","9"],"a":0},{"q":"4 - 4 = ?","o":["4","1","0","8"],"a":2}],"1|ICSE|Mathematics|Complements":[{"q":"3 + ___ = 5","o":["1","2","3","4"],"a":1},{"q":"How much more do you add to 6 to make 10?","o":["3","5","4","2"],"a":2},{"q":"7 + ___ = 9","o":["2","3","1","4"],"a":0}],"2|ICSE|Mathematics|Numbers Upto 1000":[{"q":"What is the place value of 5 in 352?","o":["5","50","500","5000"],"a":1},{"q":"Which number is the greatest?","o":["489","498","849","839"],"a":2},{"q":"What comes just before 700?","o":["701","699","690","709"],"a":1}],"3|CBSE|Mathematics|4-digit numbers":[{"q":"What is the place value of 7 in 4,725?","o":["7","70","700","7000"],"a":2},{"q":"Which is the smallest 4-digit number?","o":["9999","1000","1111","0001"],"a":1},{"q":"What is 3,458 rounded to the nearest hundred?","o":["3,400","3,500","3,450","3,000"],"a":1}],"3|CBSE|Mathematics|Addition":[{"q":"456 + 234 = ?","o":["680","690","670","790"],"a":1},{"q":"A shop sold 325 pencils on Monday and 148 on Tuesday. How many in total?","o":["463","473","483","453"],"a":1},{"q":"What do you add to 250 to make 400?","o":["150","250","100","200"],"a":0}],"3|CBSE|Mathematics|Subtraction":[{"q":"800 - 356 = ?","o":["444","454","434","544"],"a":0},{"q":"Riya had 500 rupees. She spent 275. How much is left?","o":["235","225","325","275"],"a":1},{"q":"What is the difference between 900 and 550?","o":["450","350","250","400"],"a":1}],"3|CBSE|Mathematics|Multiplication":[{"q":"7 × 8 = ?","o":["54","56","64","48"],"a":1},{"q":"There are 6 boxes with 9 chocolates in each. How many chocolates in all?","o":["45","54","56","63"],"a":1},{"q":"Any number multiplied by 0 gives:","o":["The same number","1","0","10"],"a":2}],"3|CBSE|Mathematics|Fair Share (Division)":[{"q":"12 mangoes shared equally among 4 friends. Each gets:","o":["2","3","4","6"],"a":1},{"q":"20 ÷ 5 = ?","o":["4","5","3","6"],"a":0},{"q":"Division is the same as:","o":["Repeated addition","Repeated subtraction","Adding zero","Counting up"],"a":1}],"3|CBSE|Mathematics|House of Hundreds":[{"q":"10 tens make:","o":["10","100","1000","110"],"a":1},{"q":"3 hundreds + 4 tens + 2 ones = ?","o":["342","324","432","234"],"a":0},{"q":"How many hundreds are there in 600?","o":["60","6","600","16"],"a":1}],"3|CBSE|Mathematics|Give and Take":[{"q":"48 + 25 = ?","o":["73","63","83","74"],"a":0},{"q":"To add 99, you can add 100 and then:","o":["Add 1","Take away 1","Add 10","Take away 10"],"a":1},{"q":"62 - 19 = ?","o":["43","53","44","42"],"a":0}],"3|CBSE|Mathematics|Let's explore the 3D World":[{"q":"Which of these is a 3D shape?","o":["Circle","Square","Cube","Triangle"],"a":2},{"q":"How many faces does a cube have?","o":["4","6","8","12"],"a":1},{"q":"A cold drink can looks like a:","o":["Cone","Sphere","Cylinder","Cube"],"a":2}],"3|CBSE|Mathematics|Filling and Lifting":[{"q":"Which holds MORE water?","o":["A spoon","A cup","A bucket","A bottle cap"],"a":2},{"q":"We measure how heavy things are using:","o":["A scale/balance","A clock","A ruler","A cup"],"a":0},{"q":"1 litre of water fills:","o":["A spoon","A small bottle","A teacup only","A drop"],"a":1}],"3|CBSE|Mathematics|Time Goes On":[{"q":"How many minutes are there in 1 hour?","o":["30","60","100","24"],"a":1},{"q":"How many days are there in a week?","o":["5","6","7","8"],"a":2},{"q":"If school starts at 8 o'clock and ends at 2 o'clock, how long is school?","o":["4 hours","5 hours","6 hours","8 hours"],"a":2}],"3|ICSE|Mathematics|4-digit numbers":[{"q":"The number 5,209 has how many thousands?","o":["2","5","9","0"],"a":1},{"q":"Which is the greatest 4-digit number?","o":["9,000","9,909","9,999","9,990"],"a":2},{"q":"7,000 + 300 + 40 + 5 = ?","o":["7,345","73,455","7,435","3,745"],"a":0}],"3|ICSE|Mathematics|Addition":[{"q":"567 + 128 = ?","o":["685","695","675","785"],"a":1},{"q":"When we add numbers, the answer is called the:","o":["Difference","Product","Sum","Quotient"],"a":2},{"q":"399 + 1 = ?","o":["300","399","400","401"],"a":2}],"3|ICSE|Mathematics|Subtraction":[{"q":"645 - 230 = ?","o":["415","425","405","515"],"a":0},{"q":"The answer in subtraction is called the:","o":["Sum","Difference","Product","Total"],"a":1},{"q":"1000 - 1 = ?","o":["99","999","9999","990"],"a":1}],"3|ICSE|Mathematics|Multiplication":[{"q":"9 × 6 = ?","o":["45","54","63","56"],"a":1},{"q":"The answer in multiplication is called the:","o":["Sum","Difference","Product","Quotient"],"a":2},{"q":"5 × 10 = ?","o":["15","50","55","500"],"a":1}],"3|ICSE|Mathematics|Division":[{"q":"18 ÷ 3 = ?","o":["5","6","7","9"],"a":1},{"q":"The answer in division is called the:","o":["Product","Sum","Quotient","Difference"],"a":2},{"q":"How many groups of 4 can you make from 16?","o":["3","4","5","6"],"a":1}],"3|ICSE|Mathematics|Fractions":[{"q":"What fraction is one part of a pizza cut into 4 equal parts?","o":["1/2","1/3","1/4","4/1"],"a":2},{"q":"Which fraction means HALF?","o":["1/4","1/2","1/3","2/1"],"a":1},{"q":"In the fraction 3/4, the number 4 is the:","o":["Numerator","Denominator","Whole","Quotient"],"a":1}],"3|ICSE|Mathematics|Money":[{"q":"How many 50-paise coins make 1 rupee?","o":["1","2","4","5"],"a":1},{"q":"₹10 + ₹5 + ₹2 = ?","o":["₹15","₹17","₹18","₹12"],"a":1},{"q":"If a toffee costs ₹2, how many can you buy with ₹10?","o":["4","5","6","8"],"a":1}],"3|ICSE|Mathematics|Time":[{"q":"The short hand of a clock shows:","o":["Minutes","Seconds","Hours","Days"],"a":2},{"q":"How many hours are there in a day?","o":["12","24","60","30"],"a":1},{"q":"When the minute hand is on 6, we say it is:","o":["o'clock","Quarter past","Half past","Quarter to"],"a":2}],"3|ICSE|Mathematics|Measurement":[{"q":"We measure the length of a pencil in:","o":["Kilometres","Centimetres","Litres","Kilograms"],"a":1},{"q":"1 metre = ___ centimetres","o":["10","100","1000","50"],"a":1},{"q":"We measure milk in:","o":["Metres","Kilograms","Litres","Centimetres"],"a":2}],"3|ICSE|Mathematics|Data Handling":[{"q":"A picture graph uses ___ to show information.","o":["Only numbers","Pictures or symbols","Only words","Colours only"],"a":1},{"q":"If ⚽ = 2 goals and the chart shows ⚽⚽⚽, how many goals is that?","o":["3","4","6","2"],"a":2},{"q":"Collecting and arranging information is called:","o":["Drawing","Data handling","Measuring","Adding"],"a":1}],"3|CBSE|English|Adjectives":[{"q":"An adjective is a word that describes a:","o":["Verb","Noun","Sentence","Preposition"],"a":1},{"q":"Pick the adjective: 'The red balloon flew high.'","o":["balloon","flew","red","high"],"a":2},{"q":"Which word is an adjective?","o":["Run","Happy","Sing","Jump"],"a":1}],"3|CBSE|English|Pronouns":[{"q":"A pronoun is used in place of a:","o":["Verb","Adjective","Noun","Sentence"],"a":2},{"q":"'Riya is my friend. ___ is very kind.' Which pronoun fits?","o":["He","She","It","They"],"a":1},{"q":"Which of these is a pronoun?","o":["Table","Quickly","We","Blue"],"a":2}],"3|CBSE|English|Verbs Modals":[{"q":"A verb is a word that shows:","o":["A name","An action","A colour","A place"],"a":1},{"q":"Pick the verb: 'The dog barks loudly.'","o":["dog","barks","loudly","the"],"a":1},{"q":"'You ___ wash your hands before eating.' Which word fits best?","o":["should","would","can't","won't"],"a":0}],"3|CBSE|English|Conjunctions":[{"q":"A conjunction joins:","o":["Colours","Words or sentences","Pictures","Sounds"],"a":1},{"q":"'I like tea ___ coffee.' Which word joins them?","o":["but","and","so","because"],"a":1},{"q":"'I was tired, ___ I slept early.' Choose the best word:","o":["so","and","or","but"],"a":0}],"3|CBSE|English|Degrees of comparison":[{"q":"Which is the correct order?","o":["big, bigger, biggest","big, biggest, bigger","bigger, big, biggest","biggest, bigger, big"],"a":0},{"q":"'This is the ___ mango of all.'","o":["sweet","sweeter","sweetest","most sweet"],"a":2},{"q":"The comparative form of 'good' is:","o":["gooder","better","best","more good"],"a":1}],"3|CBSE|English|Quantifier Fun / Quest":[{"q":"'There is ___ milk in the glass.' Which fits?","o":["many","some","few","several"],"a":1},{"q":"We use 'many' with things we can:","o":["Count","Not count","Drink","See only"],"a":0},{"q":"'___ children came to the party.' Which fits?","o":["Much","Many","A little","Less"],"a":1}],"3|CBSE|English|Reading Comprehension":[{"q":"Before answering questions about a passage, you should first:","o":["Guess the answers","Read the passage carefully","Close the book","Write anything"],"a":1},{"q":"The main idea of a story tells us:","o":["Only the ending","What the story is mostly about","The number of pages","The author's name only"],"a":1},{"q":"To find an answer in the passage, it helps to look for:","o":["Key words from the question","Pictures only","The longest sentence","The title only"],"a":0}],"3|CBSE|EVS|Food We Eat":[{"q":"Which of these foods gives us energy?","o":["Rice and chapati","Stones","Plastic","Sand"],"a":0},{"q":"Fruits and vegetables keep us:","o":["Sick","Healthy","Tired","Sleepy"],"a":1},{"q":"Which meal do we eat in the morning?","o":["Dinner","Lunch","Breakfast","Supper"],"a":2}],"3|CBSE|EVS|Getting to Know Plants":[{"q":"Which part of the plant makes food?","o":["Root","Leaf","Flower","Fruit"],"a":1},{"q":"Which part of the plant grows under the ground?","o":["Leaf","Flower","Root","Fruit"],"a":2},{"q":"A very big and strong plant with a thick stem is called a:","o":["Herb","Shrub","Tree","Creeper"],"a":2}],"3|CBSE|EVS|Animals, Their Habitats, and Interdependence":[{"q":"The natural home of an animal is called its:","o":["School","Habitat","Market","Garage"],"a":1},{"q":"Which animal lives in water?","o":["Fish","Cat","Hen","Dog"],"a":0},{"q":"Animals that eat only plants are called:","o":["Carnivores","Herbivores","Omnivores","Insects"],"a":1}],"3|CBSE|EVS|Human Body":[{"q":"Which organ helps us to see?","o":["Ears","Eyes","Nose","Tongue"],"a":1},{"q":"We breathe with the help of our:","o":["Heart","Lungs","Stomach","Bones"],"a":1},{"q":"How many sense organs do we have?","o":["3","4","5","6"],"a":2}],"3|CBSE|EVS|Water — A Precious Gift":[{"q":"Which of these is a source of water?","o":["River","Rock","Fire","Wood"],"a":0},{"q":"We should ___ water.","o":["Waste","Save","Dirty","Throw"],"a":1},{"q":"Rain gives us:","o":["Sand","Water","Fire","Wind"],"a":1}],"3|CBSE|EVS|Ticking Time":[{"q":"A clock tells us the:","o":["Weather","Time","Place","Colour"],"a":1},{"q":"Which comes first in a day?","o":["Night","Evening","Morning","Afternoon"],"a":2},{"q":"A calendar shows days, weeks and:","o":["Hours","Minutes","Months","Seconds"],"a":2}],"3|CBSE|EVS|Early Means of Transport":[{"q":"Long ago, people travelled on:","o":["Aeroplanes","Bullock carts","Metro trains","Rockets"],"a":1},{"q":"Boats were used to travel on:","o":["Roads","Water","Mountains","Air"],"a":1},{"q":"Which animal was used to pull carts?","o":["Fish","Bullock","Butterfly","Sparrow"],"a":1}],"3|CBSE|EVS|Modern Means of Transport":[{"q":"Which is the fastest way to travel far?","o":["Bicycle","Bullock cart","Aeroplane","Walking"],"a":2},{"q":"A train runs on:","o":["Water","Tracks","Air","Sand"],"a":1},{"q":"Which of these is used to travel on water today?","o":["Ship","Bus","Cycle","Truck"],"a":0}],"3|CBSE|EVS|People Around Us":[{"q":"A person who teaches us in school is a:","o":["Doctor","Teacher","Farmer","Pilot"],"a":1},{"q":"A doctor helps us when we are:","o":["Happy","Sick","Playing","Sleeping"],"a":1},{"q":"A farmer grows:","o":["Cars","Food crops","Books","Clothes"],"a":1}],"3|CBSE|EVS|Role of Family and Relationships":[{"q":"Your mother's mother is your:","o":["Aunt","Sister","Grandmother","Cousin"],"a":2},{"q":"A family where parents and children live together is a:","o":["Big market","Small/nuclear family","School","Team"],"a":1},{"q":"Family members should always:","o":["Fight","Help each other","Ignore each other","Stay apart"],"a":1}],"3|CBSE|EVS|Celebrating Festivals":[{"q":"Diwali is known as the festival of:","o":["Colours","Lights","Kites","Rain"],"a":1},{"q":"Holi is the festival of:","o":["Lights","Colours","Trees","Books"],"a":1},{"q":"Festivals bring people:","o":["Apart","Together","Sadness","Sleep"],"a":1}],"3|CBSE|EVS|Going to the Mela":[{"q":"A mela is a:","o":["School","Fair","Hospital","Library"],"a":1},{"q":"At a mela, we can see:","o":["Swings and stalls","Only classrooms","Only beds","Only offices"],"a":0},{"q":"In a crowded mela, children should:","o":["Run away alone","Hold their parent's hand","Talk to strangers","Hide"],"a":1}],"3|CBSE|EVS|Making Things":[{"q":"A potter makes things from:","o":["Wood","Clay","Iron","Cloth"],"a":1},{"q":"A carpenter works with:","o":["Clay","Wood","Wool","Glass"],"a":1},{"q":"Cloth is stitched into clothes by a:","o":["Cobbler","Tailor","Potter","Barber"],"a":1}],"3|CBSE|EVS|Our Heritage":[{"q":"The Taj Mahal is in:","o":["Delhi","Agra","Mumbai","Jaipur"],"a":1},{"q":"Old monuments and traditions are part of our:","o":["Homework","Heritage","Playground","Kitchen"],"a":1},{"q":"We should ___ our monuments.","o":["Write on","Protect","Break","Dirty"],"a":1}],"3|CBSE|EVS|Role of Mahatma Gandhi":[{"q":"Mahatma Gandhi is called the:","o":["Father of the Nation","King of India","First Teacher","First Doctor"],"a":0},{"q":"Gandhiji believed in:","o":["Fighting","Truth and non-violence","Shouting","Anger"],"a":1},{"q":"Gandhiji's birthday is celebrated on:","o":["15 August","2 October","26 January","14 November"],"a":1}],"3|CBSE|EVS|Safety Rules: At Home and School":[{"q":"We should cross the road at the:","o":["Middle of the road","Zebra crossing","Anywhere","Behind a bus"],"a":1},{"q":"While using scissors, we should be:","o":["Careless","Careful","Fast","Sleepy"],"a":1},{"q":"If your clothes catch fire, you should:","o":["Run fast","Stop, drop and roll","Hide","Jump"],"a":1}],"3|CBSE|EVS|Taking Charge of Waste":[{"q":"We should throw garbage in the:","o":["River","Dustbin","Road","Garden"],"a":1},{"q":"Reuse, Reduce and ___ are the 3 R's.","o":["Run","Recycle","Read","Rest"],"a":1},{"q":"Fruit and vegetable peels can be turned into:","o":["Plastic","Compost","Glass","Metal"],"a":1}],"3|CBSE|EVS|Changes in Our Surroundings":[{"q":"Which season comes after summer in India?","o":["Winter","Rainy season","Spring","Autumn"],"a":1},{"q":"In winter, we wear ___ clothes.","o":["Cotton","Woollen","Wet","Torn"],"a":1},{"q":"Trees around us give us:","o":["Smoke","Fresh air","Dust","Noise"],"a":1}],"3|CBSE|EVS|Living in Harmony":[{"q":"Living in harmony means living:","o":["Alone","Peacefully together","Fighting daily","Away from all"],"a":1},{"q":"We should treat everyone with:","o":["Anger","Respect","Fear","Jealousy"],"a":1},{"q":"Helping our neighbours makes our community:","o":["Weaker","Stronger and happier","Noisy","Smaller"],"a":1}],"3|ICSE|EVS|Plants in the Surroundings":[{"q":"Plants give us ___ to breathe.","o":["Carbon dioxide","Oxygen","Smoke","Dust"],"a":1},{"q":"Small plants with soft stems are called:","o":["Trees","Herbs","Shrubs","Climbers"],"a":1},{"q":"Which plant climbs up with support?","o":["Mango tree","Money plant","Rose","Neem tree"],"a":1}],"3|ICSE|EVS|Food We Get from Plants":[{"q":"Which food comes from plants?","o":["Milk","Rice","Eggs","Honey"],"a":1},{"q":"Carrot is a ___ that we eat.","o":["Leaf","Root","Flower","Seed"],"a":1},{"q":"We get spinach (palak) from the ___ of the plant.","o":["Root","Leaves","Fruit","Stem"],"a":1}],"3|ICSE|EVS|Human Body":[{"q":"The organ that pumps blood in our body is the:","o":["Brain","Heart","Lungs","Stomach"],"a":1},{"q":"Food is digested in our:","o":["Ears","Stomach","Eyes","Bones"],"a":1},{"q":"The ___ controls our whole body.","o":["Hand","Brain","Foot","Hair"],"a":1}],"3|ICSE|EVS|Community Helping Each Other":[{"q":"A person who delivers letters is a:","o":["Postman","Doctor","Pilot","Chef"],"a":0},{"q":"Police help to keep us:","o":["Sick","Safe","Late","Scared"],"a":1},{"q":"People in a community should ___ each other.","o":["Ignore","Help","Trouble","Fight"],"a":1}],"3|ICSE|EVS|India — Land of Rich Heritage":[{"q":"Our national flag has ___ colours.","o":["Two","Three","Four","Five"],"a":1},{"q":"The national bird of India is the:","o":["Crow","Peacock","Parrot","Sparrow"],"a":1},{"q":"The national animal of India is the:","o":["Lion","Tiger","Elephant","Horse"],"a":1}],"3|ICSE|EVS|Understanding Changes":[{"q":"Ice changes into water when it is:","o":["Cooled","Heated","Frozen","Covered"],"a":1},{"q":"A seed slowly grows into a:","o":["Stone","Plant","Cloud","Star"],"a":1},{"q":"Which change happens in our body as we grow?","o":["We become taller","We become a seed","We turn into water","Nothing changes"],"a":0}]};
 const ALL_SUBJ = ['Mathematics','EVS','English','SST','Science','Physics','Chemistry','Biology','Hindi'];
 const availSubj = new Set(DATA.map(r=>r.subject));
 
@@ -412,13 +437,84 @@ function render(){
       '<div class="ch-body">'+
         '<div class="ch-name">'+esc(r.chapter)+'</div>'+
         '<div class="ch-meta">Class '+r.gradeNum+' · '+(r.board==='BOTH'?board:r.board)+' · '+meta.label+'</div>'+
-        '<div class="ch-btns">'+btns+'</div>'+
+        '<div class="ch-btns">'+btns+quizBtn(r)+'</div>'+
       '</div>'+
       shareBtn(r)+
     '</div>';
   }).join('');
 }
 
+
+/* ── MCQ revision quiz ─────────────────────────────────────────── */
+function quizKey(r){ return r.gradeNum+'|'+(r.board==='BOTH'?board:r.board)+'|'+r.subject+'|'+r.chapter; }
+
+function quizBtn(r){
+  if(!QUIZ[quizKey(r)]) return '';
+  return '<button class="quiz-btn" onclick="openQuiz(this)" data-qk="'+esc(quizKey(r)).replace(/"/g,'&quot;')+'" data-ch="'+esc(r.chapter).replace(/"/g,'&quot;')+'">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Quiz</button>';
+}
+
+let qz=null;
+function openQuiz(btn){
+  const key=btn.dataset.qk, chapter=btn.dataset.ch;
+  const qs=QUIZ[key];
+  if(!qs) return;
+  qz={qs:qs, chapter:chapter, i:0, score:0, answered:false};
+  const ov=document.createElement('div');
+  ov.className='qz-overlay'; ov.id='qzOverlay';
+  ov.style.top=window.scrollY+'px'; ov.style.height=window.innerHeight+'px';
+  ov.onclick=e=>{ if(e.target===ov) closeQuiz(); };
+  ov.innerHTML='<div class="qz-modal" id="qzModal"></div>';
+  document.body.appendChild(ov);
+  drawQuestion();
+}
+function closeQuiz(){
+  const ov=document.getElementById('qzOverlay');
+  if(ov) ov.remove();
+  qz=null;
+}
+function drawQuestion(){
+  const m=document.getElementById('qzModal');
+  const q=qz.qs[qz.i];
+  qz.answered=false;
+  m.innerHTML=
+    '<div class="qz-top"><div class="qz-chapter">'+esc(qz.chapter)+'</div>'+
+    '<button class="qz-close" onclick="closeQuiz()" aria-label="Close">×</button></div>'+
+    '<div class="qz-prog">Question '+(qz.i+1)+' of '+qz.qs.length+'</div>'+
+    '<div class="qz-q">'+esc(q.q)+'</div>'+
+    '<div class="qz-opts">'+q.o.map((opt,i)=>
+      '<button class="qz-opt" onclick="pickOpt(this,'+i+')">'+esc(opt)+'</button>').join('')+'</div>';
+}
+function pickOpt(btn,i){
+  if(qz.answered) return;
+  qz.answered=true;
+  const q=qz.qs[qz.i];
+  const opts=btn.parentNode.children;
+  for(const o of opts) o.disabled=true;
+  opts[q.a].classList.add('correct');
+  if(i===q.a){ qz.score++; }
+  else { btn.classList.add('wrong'); }
+  const m=document.getElementById('qzModal');
+  const nb=document.createElement('button');
+  nb.className='qz-next';
+  nb.textContent=(qz.i+1<qz.qs.length)?'Next question':'See my score';
+  nb.onclick=()=>{ qz.i++; (qz.i<qz.qs.length)?drawQuestion():drawScore(); };
+  m.appendChild(nb);
+}
+function drawScore(){
+  const m=document.getElementById('qzModal');
+  const n=qz.qs.length, s=qz.score;
+  const em=s===n?'🏆':(s>=n/2?'🌟':'💪');
+  const msg=s===n?'Perfect! You are exam-ready.':(s>=n/2?'Great going! One more read and you’ll ace it.':'Good try! Open the notes once more, then quiz again.');
+  m.innerHTML=
+    '<div class="qz-top"><div class="qz-chapter">'+esc(qz.chapter)+'</div>'+
+    '<button class="qz-close" onclick="closeQuiz()" aria-label="Close">×</button></div>'+
+    '<div class="qz-score"><div class="qz-score-emoji">'+em+'</div>'+
+    '<div class="qz-score-big">'+s+' / '+n+'</div>'+
+    '<div class="qz-score-msg">'+msg+'</div>'+
+    '<button class="qz-next" onclick="retryQuiz()">Try again</button></div>';
+}
+function retryQuiz(){ qz.i=0; qz.score=0; drawQuestion(); }
 
 buildBoardToggle();
 buildSubjectTabs();
