@@ -70,7 +70,6 @@ a{color:var(--blue);text-decoration:none}
 /* results */
 .results-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
 .results-title{font-size:14px;font-weight:900;color:var(--ink);letter-spacing:-.2px}
-.results-pill{font-size:11px;font-weight:800;background:var(--blue-soft);color:var(--blue);padding:3px 10px;border-radius:var(--r-pill)}
 .results-hdr-right{display:flex;align-items:center;gap:8px}
 .search-toggle{width:30px;height:30px;border-radius:var(--r-sm);background:none;border:1.5px solid transparent;display:grid;place-items:center;color:var(--ink-3);transition:all .13s}
 .search-toggle:hover,.search-toggle.active{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
@@ -88,7 +87,6 @@ a{color:var(--blue);text-decoration:none}
 .ch-name{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:-.2px;line-height:1.3;margin-bottom:2px}
 .ch-meta{font-size:11px;color:var(--ink-3);font-weight:600;margin-bottom:5px}
 .ch-btns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.ch-ready{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;background:var(--green-soft);color:var(--green);padding:2px 7px;border-radius:var(--r-pill);letter-spacing:.2px}
 
 /* PDF buttons */
 .pdf-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:10px;background:var(--blue);color:#fff;font-size:11px;font-weight:800;letter-spacing:.2px;text-decoration:none;transition:all .13s;border:none;cursor:pointer;font-family:inherit}
@@ -165,7 +163,6 @@ a{color:var(--blue);text-decoration:none}
   <div class="results-hdr">
     <span class="results-title" id="resultsTitle">Chapters</span>
     <div class="results-hdr-right">
-      <span class="results-pill" id="resultsPill">—</span>
       <button class="search-toggle" id="searchToggle" onclick="toggleSearch()" aria-label="Search chapters">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
@@ -394,7 +391,6 @@ function render(){
   });
   const meta=SUBJ_META[subject]||{label:subject};
   document.getElementById('resultsTitle').textContent=board+' · Class '+grade+' · '+meta.label;
-  document.getElementById('resultsPill').textContent=filtered.length+' chapters ready';
 
   const list=document.getElementById('chList');
   if(!filtered.length){
