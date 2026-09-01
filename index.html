@@ -166,6 +166,30 @@ a{color:var(--accent-text);text-decoration:none}
   *,*::before,*::after{transition:none!important;animation:none!important}
 }
 
+/* ── Floating mentor CTA ─────────────────────────────────────────────── */
+.mentor-float{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:9px;
+  background:var(--accent);color:#fff;
+  padding:11px 20px;border-radius:var(--r-pill);
+  font-size:13px;font-weight:800;
+  box-shadow:0 4px 18px rgba(var(--accent-ring),.38);
+  border:none;cursor:pointer;white-space:nowrap;
+  transition:background .14s,box-shadow .14s,transform .14s;
+  z-index:900;text-decoration:none;
+  max-width:calc(100vw - 32px);
+}
+.mentor-float:hover{background:var(--accent-hover);box-shadow:0 6px 22px rgba(var(--accent-ring),.46);transform:translateX(-50%) translateY(-2px)}
+.mentor-float:active{transform:translateX(-50%) translateY(0)}
+.mentor-float .mf-icon{font-size:18px;line-height:1;flex-shrink:0}
+.mentor-float .mf-text{display:flex;flex-direction:column;gap:1px;text-align:left}
+.mentor-float .mf-title{font-size:13px;font-weight:900;line-height:1.2}
+.mentor-float .mf-sub{font-size:10px;font-weight:700;opacity:.82;line-height:1}
+@media(max-width:380px){
+  .mentor-float .mf-sub{display:none}
+  .mentor-float{padding:11px 16px}
+}
+
 </style>
 
 <svg class="cloud cloud-l" width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -476,6 +500,14 @@ buildBoardToggle();
 buildSubjectTabs();
 render();
 </script>
+
+<a class="mentor-float" href="MENTOR_LINK_HERE" target="_blank" rel="noopener">
+  <span class="mf-icon">💬</span>
+  <span class="mf-text">
+    <span class="mf-title">Got doubts? Ask your mentor</span>
+    <span class="mf-sub">Connect now →</span>
+  </span>
+</a>
 
 </body>
 </html>
