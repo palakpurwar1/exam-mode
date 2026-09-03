@@ -315,9 +315,7 @@ function clearSearch(){
 }
 
 function shareBtn(r){
-  const url = r.pdfUrls[0];
-  const title = r.chapter;
-  const arg = (JSON.stringify(url)+','+JSON.stringify(title)).replace(/"/g,'&quot;');
+  const arg = (JSON.stringify(r.pdfUrls)+','+JSON.stringify(r.chapter)).replace(/"/g,'&quot;');
   return '<button class="share-btn" onclick="shareChapter(this,'+arg+')" aria-label="Share">'+
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'+
   '</button>';
@@ -349,27 +347,35 @@ function canShareTray(){
   return /Mobi|Android|iPhone|iPad|iPod/i.test(ua) || (navigator.maxTouchPoints>1 && /Mac/.test(ua));
 }
 
-function copyAndToast(btn, url){
+function copyAndToast(btn, text){
   const ta=document.createElement('textarea');
-  ta.value=url; ta.setAttribute('readonly','');
+  ta.value=text; ta.setAttribute('readonly','');
   ta.style.cssText='position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;border:0;padding:0';
   document.body.appendChild(ta); ta.focus(); ta.select();
   try{ document.execCommand('copy'); }catch(e){}
   document.body.removeChild(ta);
-  navigator.clipboard?.writeText(url).catch(()=>{});
+  navigator.clipboard?.writeText(text).catch(()=>{});
   showToast('Link copied!', btn);
 }
 
-function shareChapter(btn, url, title){
-  // Mobile: native share tray. Call it first so the user gesture is still valid.
+function shareChapter(btn, urls, title){
+  const multi = Array.isArray(urls) && urls.length > 1;
+  const shareText = multi
+    ? title + '\n' + urls.map((u,i) => 'Pt '+(i+1)+': '+u).join('\n')
+    : title;
+  const shareUrl = Array.isArray(urls) ? urls[0] : urls;
+  const copyText = multi
+    ? title + '\n' + urls.map((u,i) => 'Pt '+(i+1)+': '+u).join('\n')
+    : shareUrl;
+
   if(canShareTray()){
     try{
-      navigator.share({title:'Revise '+title+' — CuriousJr Notes', text:'Revise '+title+':', url:url})
-        .catch(err=>{ if(err&&err.name!=='AbortError') copyAndToast(btn,url); });
+      navigator.share({title:'Revise '+title+' — CuriousJr Notes', text: shareText + (multi ? '' : ':'), url: multi ? undefined : shareUrl})
+        .catch(err=>{ if(err&&err.name!=='AbortError') copyAndToast(btn, copyText); });
       return;
-    }catch(e){ /* blocked (e.g. iframe) — fall through to copy */ }
+    }catch(e){}
   }
-  copyAndToast(btn, url);
+  copyAndToast(btn, copyText);
 }
 
 
