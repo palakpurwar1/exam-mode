@@ -43,11 +43,11 @@ a{color:#E05C14;text-decoration:none}
 .si{font-size:15px;line-height:1}
 
 /* Chapter cards */
-.ch-card{display:flex;align-items:flex-start;gap:12px;background:#fff;border:1.5px solid #EFE4D4;border-radius:16px;padding:14px;transition:box-shadow .15s,border-color .15s}
+.ch-card{display:flex;align-items:center;gap:16px;background:#fff;border:1.5px solid #EFE4D4;border-radius:18px;padding:18px 16px;transition:box-shadow .15s,border-color .15s}
 .ch-card:hover{box-shadow:0 4px 20px rgba(44,30,22,.10);border-color:#E8D5C0}
-.ch-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ch-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
 .ch-body{flex:1;min-width:0}
-.ch-name{font-size:14px;font-weight:800;color:#2C1E16;line-height:1.3;margin-bottom:3px}
+.ch-name{font-size:15px;font-weight:800;color:#2C1E16;line-height:1.35;margin-bottom:10px}
 .ch-meta{font-size:11.5px;color:#8C7A6B;font-weight:600;margin-bottom:8px}
 .ch-btns{display:flex;gap:6px;flex-wrap:wrap}
 
@@ -83,23 +83,25 @@ a{color:#E05C14;text-decoration:none}
 .es{font-size:13px;color:#8C7A6B;font-weight:600;line-height:1.5}
 
 /* Cards grid */
-.ch-list{padding:0 16px 96px;display:grid;gap:10px}
+.ch-list{padding:0 16px 120px;display:grid;gap:14px}
 
 /* Floating mentor pill */
-.mentor-float{position:fixed;bottom:72px;right:20px;display:flex;align-items:center;gap:8px;background:#E05C14;color:#fff;padding:10px 16px;border-radius:100px;font-size:13px;font-weight:800;box-shadow:0 4px 20px rgba(224,92,20,.45);border:none;cursor:pointer;white-space:nowrap;transition:background .14s,box-shadow .14s,transform .14s;z-index:900;text-decoration:none}.mentor-float:hover{background:#c94f0f;transform:scale(1.04)}
-.mentor-float:hover{background:#C44E0E;box-shadow:0 6px 22px rgba(224,92,20,.46);transform:translateX(-50%) translateY(-2px)}
+.mentor-float{position:fixed;bottom:72px;right:max(16px,calc((100vw - 480px)/2 + 16px));display:flex;align-items:center;gap:8px;background:#E05C14;color:#fff;padding:10px 16px;border-radius:100px;font-size:13px;font-weight:800;box-shadow:0 4px 20px rgba(224,92,20,.45);border:none;cursor:pointer;white-space:nowrap;transition:background .14s,box-shadow .14s;z-index:900;text-decoration:none}.mentor-float:hover{background:#C44E0E;box-shadow:0 6px 24px rgba(224,92,20,.55)}
+
 .mentor-float:active{transform:translateX(-50%) translateY(0)}
 
 /* Responsive grid */
 @media(min-width:700px){
   body{font-size:15px}
   #shell{max-width:768px}
-  .ch-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 48px 96px}
+  .ch-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 48px 120px}
   .chips-scroll,.subj-scroll{flex-wrap:wrap;overflow:visible}
+  .mentor-float{right:max(48px,calc((100vw - 768px)/2 + 48px))}
 }
 @media(min-width:1060px){
   #shell{max-width:1140px}
-  .ch-list{grid-template-columns:repeat(3,minmax(0,1fr));padding:0 48px 96px}
+  .ch-list{grid-template-columns:repeat(3,minmax(0,1fr));padding:0 48px 120px}
+  .mentor-float{right:max(48px,calc((100vw - 1140px)/2 + 48px))}
 }
 @media(hover:none){
   .ch-card:hover{box-shadow:none;border-color:#EFE4D4}
@@ -141,7 +143,7 @@ a{color:#E05C14;text-decoration:none}
       <img src="Image.svg" alt="CuriousJr mascot" class="flex-shrink-0" style="height:clamp(90px,12vw,160px);width:auto">
       <div>
         <div class="text-[10px] md:text-[13px] font-extrabold tracking-[1.6px] uppercase text-[#E05C14] mb-1 md:mb-2">One stop for all things exams</div>
-        <h1 class="text-[20px] md:text-[38px] font-black text-[#2C1E16] tracking-tight mb-1 md:mb-2 leading-snug">Why exam fear?<br>When CuriousJr is here! 📚</h1>
+        <h1 class="text-[20px] md:text-[38px] font-black text-[#2C1E16] tracking-tight mb-1 md:mb-2 leading-snug">Why exam fear?<br>When Curious<span style="color:#E05C14">Jr</span> is here! 📚</h1>
         <p class="text-[11px] md:text-[15px] text-[#8C7A6B] font-semibold">Find last minute detailed revision material here</p>
       </div>
     </div>
@@ -194,11 +196,8 @@ a{color:#E05C14;text-decoration:none}
 
 <!-- Floating mentor CTA -->
 <a class="mentor-float" href="MENTOR_LINK_HERE" target="_blank" rel="noopener">
-  <span style="font-size:17px;line-height:1">💬</span>
-  <span style="display:flex;flex-direction:column;gap:1px">
-    <span style="font-size:12px;font-weight:900;line-height:1.2">Connect with Mentor</span>
-    <span style="font-size:10px;font-weight:600;opacity:.85;line-height:1">Clear your doubts →</span>
-  </span>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.92 12 19.79 19.79 0 0 1 1.85 3.5 2 2 0 0 1 3.84 1.32h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.37a16 16 0 0 0 6.72 6.72l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  <span style="font-size:13px;font-weight:800;letter-spacing:.1px">Connect with Mentor</span>
 </a>
 
 <script>
@@ -436,7 +435,6 @@ function render(){
       '<div class="ch-icon" style="background:'+ic.bg+'">'+ic.em+'</div>'+
       '<div class="ch-body">'+
         '<div class="ch-name">'+esc(r.chapter)+'</div>'+
-        '<div class="ch-meta">Class '+r.gradeNum+' · '+(r.board==='BOTH'?board:r.board)+' · '+meta.label+'</div>'+
         '<div class="ch-btns">'+btns+'</div>'+
       '</div>'+
       shareBtn(r)+
