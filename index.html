@@ -69,6 +69,14 @@ a{color:#E05C14;text-decoration:none}
 .ch-card.ch-done{border-color:#A8D48A;background:#F6FCF0}
 .ch-card.ch-done .ch-name{color:#3A6B1E}
 .progress-badge{font-size:11px;font-weight:700;color:#64A338;background:#EDF7E6;border-radius:100px;padding:2px 10px;margin-left:8px}
+@keyframes tick-circle-draw{from{stroke-dashoffset:157}to{stroke-dashoffset:0}}
+@keyframes tick-check-draw{0%{stroke-dashoffset:48;opacity:0}40%{opacity:0}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes done-banner-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.all-done-tick{display:flex;justify-content:center;margin-bottom:8px}
+.tick-svg{width:56px;height:56px}
+.tick-circle{stroke-dasharray:157;stroke-dashoffset:157;animation:tick-circle-draw .55s cubic-bezier(.4,0,.2,1) forwards}
+.tick-check{stroke-dasharray:48;stroke-dashoffset:48;animation:tick-check-draw .5s ease .35s forwards}
+#allDoneBanner{animation:done-banner-in .3s ease forwards}
 
 /* Search */
 .search-wrap{overflow:hidden;max-height:0;transition:max-height .2s,padding .2s}
@@ -193,6 +201,19 @@ a{color:#E05C14;text-decoration:none}
   </div>
 
   <!-- ── Cards ──────────────────────────────────────────────────────────── -->
+  <div class="px-4 md:px-12" style="margin-bottom:16px">
+  <div id="allDoneBanner" style="display:none;padding:20px 18px 16px;background:#F0FAE8;border:1.5px solid #A8D48A;border-radius:18px;text-align:center">
+    <div class="all-done-tick">
+      <svg class="tick-svg" viewBox="0 0 52 52" fill="none">
+        <circle class="tick-circle" cx="26" cy="26" r="25" stroke="#64A338" stroke-width="2"/>
+        <path class="tick-check" stroke="#64A338" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-16"/>
+      </svg>
+    </div>
+    <img src="done-mascot.png" alt="Ready for exam" style="height:120px;width:auto;margin:4px auto 10px;display:block">
+    <div style="font-size:15px;font-weight:800;color:#3A6B1E">You are all ready for your exam.</div>
+    <div style="font-size:13px;font-weight:600;color:#5A8A3A;margin-top:3px">Best of luck! 🌟</div>
+  </div>
+  </div>
   <div class="ch-list" id="chList"></div>
 
   <!-- ── Footer ─────────────────────────────────────────────────────────── -->
@@ -212,27 +233,42 @@ a{color:#E05C14;text-decoration:none}
 <script>
 
 
-// ── Supabase completion tracking ─────────────────────────────────────────
+// ── Completion tracking (localStorage primary, Supabase sync when auth works) ──
 const _SB = supabase.createClient(
   'https://mxeprprgfebxzruwewge.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZXBycHJnZmVieHpydXdld2dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MTc5NDksImV4cCI6MjEwMzk5Mzk0OX0.d-6BUrjvEs5bGE1CvM68Om-DNorJ0nP25kumDa_SZv4'
 );
-let _doneSet = new Set(); // 'grade|board|subject|chapter'
-let _uid = null;
+const _LS_KEY = 'cjr_done_v1';
+// Stable per-device test identity (survives page reloads)
+if(!localStorage.getItem('cjr_uid')){ localStorage.setItem('cjr_uid', crypto.randomUUID()); }
+const _LOCAL_UID = localStorage.getItem('cjr_uid');
+// Bootstrap from localStorage immediately so UI shows saved state on load
+let _doneSet = new Set(JSON.parse(localStorage.getItem(_LS_KEY)||'[]'));
+let _uid = null; // set once Supabase anonymous auth succeeds
+
+function _saveLs(){ try{ localStorage.setItem(_LS_KEY, JSON.stringify([..._doneSet])); }catch(e){} }
 
 async function _initAuth(){
-  let { data:{ session } } = await _SB.auth.getSession();
-  if(!session){ await _SB.auth.signInAnonymously(); }
-  const { data:{ user } } = await _SB.auth.getUser();
-  _uid = user?.id;
-  if(_uid){ await _loadDone(); }
+  try {
+    let { data:{ session } } = await _SB.auth.getSession();
+    if(!session){ await _SB.auth.signInAnonymously(); }
+    const { data:{ user } } = await _SB.auth.getUser();
+    _uid = user?.id ?? null;
+    if(_uid){ await _loadDone(); }
+  } catch(e){ /* anonymous auth not enabled yet — localStorage keeps working */ }
 }
 
 async function _loadDone(){
   const { data } = await _SB.from('chapter_completions')
     .select('grade,board,subject,chapter');
-  _doneSet = new Set((data||[]).map(r=>`${r.grade}|${r.board}|${r.subject}|${r.chapter}`));
-  // Refresh visual state on rendered cards
+  // Merge cloud + local so neither loses data
+  const sbKeys = (data||[]).map(r=>`${r.grade}|${r.board}|${r.subject}|${r.chapter}`);
+  sbKeys.forEach(k => _doneSet.add(k));
+  _saveLs();
+  _refreshCards();
+}
+
+function _refreshCards(){
   document.querySelectorAll('.ch-card[data-key]').forEach(card=>{
     const done = _doneSet.has(card.dataset.key);
     card.classList.toggle('ch-done', done);
@@ -243,30 +279,44 @@ async function _loadDone(){
 }
 
 async function toggleDone(btn, key, gradeNum, boardVal, subjectVal, chapterVal){
-  if(!_uid) return;
   const card = btn.closest('.ch-card');
   const wasDone = _doneSet.has(key);
   if(wasDone){
     _doneSet.delete(key);
     card.classList.remove('ch-done'); btn.classList.remove('done');
-    await _SB.from('chapter_completions').delete()
+    if(_uid) _SB.from('chapter_completions').delete()
       .eq('grade',gradeNum).eq('board',boardVal).eq('subject',subjectVal).eq('chapter',chapterVal);
   } else {
     _doneSet.add(key);
     card.classList.add('ch-done'); btn.classList.add('done');
-    await _SB.from('chapter_completions').insert({grade:gradeNum,board:boardVal,subject:subjectVal,chapter:chapterVal});
+    if(_uid) _SB.from('chapter_completions').insert({grade:gradeNum,board:boardVal,subject:subjectVal,chapter:chapterVal});
   }
+  _saveLs();
   _updateProgressBadge();
 }
 
 function _updateProgressBadge(){
   const badge = document.getElementById('progressBadge');
-  if(!badge) return;
-  // Count done chapters matching current view (grade + board)
+  const allDone = document.getElementById('allDoneBanner');
   const total = document.querySelectorAll('.ch-card[data-key]').length;
   const done = document.querySelectorAll('.ch-card.ch-done').length;
-  badge.textContent = done > 0 ? done+'/'+total+' done' : '';
-  badge.style.display = done > 0 ? '' : 'none';
+  if(badge){
+    badge.textContent = done > 0 ? done+'/'+total+' done' : '';
+    badge.style.display = done > 0 ? '' : 'none';
+  }
+  if(allDone){
+    const showing = done === total && total > 0;
+    const wasHidden = allDone.style.display === 'none';
+    allDone.style.display = showing ? '' : 'none';
+    if(showing && wasHidden){
+      // Replay tick animation
+      allDone.querySelectorAll('.tick-circle,.tick-check').forEach(el=>{
+        el.style.animation='none';
+        void el.offsetWidth;
+        el.style.animation='';
+      });
+    }
+  }
 }
 
 _initAuth();
@@ -508,11 +558,12 @@ function render(){
     const _board = r.board==='BOTH'?board:r.board;
     const _key = `${r.gradeNum}|${_board}|${r.subject}|${r.chapter}`;
     const _done = _doneSet.has(_key);
-    const ea = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    const ea = s => String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
     const _keyAttr = _key.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
     const checkBtnHtml = `<button class="check-btn${_done?' done':''}" onclick="toggleDone(this,'${ea(_key)}','${ea(r.gradeNum)}','${ea(_board)}','${ea(r.subject)}','${ea(r.chapter)}')" aria-label="Mark complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>`;
     return `<div class="ch-card${_done?' ch-done':''}" data-key="${_keyAttr}"><div class="ch-icon" style="background:${ic.bg}">${ic.em}</div><div class="ch-body"><div class="ch-name">${esc(r.chapter)}</div><div class="ch-btns">${btns}</div></div>${checkBtnHtml}${shareBtn(r)}</div>`;
   }).join('');
+  _refreshCards();
 }
 
 
