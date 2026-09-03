@@ -51,12 +51,20 @@ a{color:#E05C14;text-decoration:none}
 .ch-meta{font-size:11.5px;color:#8C7A6B;font-weight:600;margin-bottom:8px}
 .ch-btns{display:flex;gap:6px;flex-wrap:wrap}
 
-/* Open Notes — outline style */
-.pdf-btn{display:inline-flex;align-items:center;gap:5px;border:1.5px solid #E05C14;color:#E05C14;background:transparent;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;transition:background .13s,box-shadow .13s;white-space:nowrap}
+/* Chapter resource buttons */
+.pdf-btn,.iq-btn,.gl-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none;transition:background .13s,box-shadow .13s;white-space:nowrap;border:1.5px solid}
+.pdf-btn svg,.iq-btn svg,.gl-btn svg{width:13px;height:13px;flex-shrink:0}
+/* Open Notes */
+.pdf-btn{border-color:#E05C14;color:#E05C14;background:transparent}
 .pdf-btn:hover{background:#FFF0E3;box-shadow:0 2px 8px rgba(224,92,20,.16)}
-.pdf-btn svg{width:13px;height:13px;flex-shrink:0}
 .pdf-btn.part2{border-color:#0F7A80;color:#0F7A80}
 .pdf-btn.part2:hover{background:#E6F6F7}
+/* Important Questions */
+.iq-btn{border-color:#9333EA;color:#9333EA;background:transparent}
+.iq-btn:hover{background:#F5F0FF;box-shadow:0 2px 8px rgba(147,51,234,.14)}
+/* Quick Glossary */
+.gl-btn{border-color:#0891B2;color:#0891B2;background:transparent}
+.gl-btn:hover{background:#ECFEFF;box-shadow:0 2px 8px rgba(8,145,178,.14)}
 
 /* Share button */
 .share-btn{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:none;border:1.5px solid #EFE4D4;color:#8C7A6B;cursor:pointer;transition:all .13s;flex-shrink:0;align-self:center}
@@ -153,13 +161,13 @@ a{color:#E05C14;text-decoration:none}
 <div class="max-w-[480px] mx-auto min-h-screen relative z-10 flex flex-col" id="shell">
 
   <!-- ── Hero ──────────────────────────────────────────────────────────── -->
-  <div class="px-4 md:px-12 pt-4 md:pt-8 pb-3 md:pb-7">
-    <div class="flex items-center justify-center gap-3 md:gap-7">
-      <img src="Image.svg" alt="CuriousJr mascot" class="flex-shrink-0" style="height:clamp(90px,12vw,160px);width:auto">
-      <div>
-        <div class="text-[10px] md:text-[13px] font-extrabold tracking-[1.6px] uppercase text-[#E05C14] mb-1 md:mb-2">One stop for all things exams</div>
-        <h1 class="text-[20px] md:text-[38px] font-black text-[#2C1E16] tracking-tight mb-1 md:mb-2 leading-snug">Why exam fear?<br>When Curious<span style="color:#E05C14">Jr</span> is here! 📚</h1>
-        <p class="text-[11px] md:text-[15px] text-[#8C7A6B] font-semibold">Find last minute detailed revision material here</p>
+  <div class="px-4 md:px-12 pt-5 md:pt-12 pb-4 md:pb-9">
+    <div class="flex items-center gap-4 md:gap-10">
+      <img src="Image.svg" alt="CuriousJr mascot" class="flex-shrink-0 md:order-last" style="height:clamp(80px,11vw,148px);width:auto">
+      <div class="flex-1 min-w-0">
+        <div class="text-[10px] md:text-[11px] font-extrabold tracking-[2px] uppercase text-[#E05C14] mb-2 md:mb-3">One stop for all things exams</div>
+        <h1 class="text-[26px] md:text-[50px] font-black text-[#2C1E16] tracking-tight mb-2 md:mb-4 leading-[1.1]">Why exam fear?<br>When Curious<span style="color:#E05C14">Jr</span> is here! 📚</h1>
+        <p class="text-[12px] md:text-[16px] text-[#8C7A6B] font-semibold">Find last minute detailed revision material here</p>
       </div>
     </div>
   </div>
@@ -551,17 +559,21 @@ function render(){
     const btns=r.pdfUrls.map((url,i)=>{
       const label=r.pdfUrls.length>1?(i===0?'Part 1':'Part '+(i+1)):'Open Notes';
       const cls='pdf-btn'+(i>0?' part2':'');
-      return '<a href="'+esc(url)+'" target="_blank" rel="noopener" class="'+cls+'">'+
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+
-        label+'</a>';
+      return `<a href="${esc(url)}" target="_blank" rel="noopener" class="${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>${label}</a>`;
     }).join('');
+    const iqBtns=(r.importantQUrls||[]).map(url=>
+      `<a href="${esc(url)}" target="_blank" rel="noopener" class="iq-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important Questions</a>`
+    ).join('');
+    const glBtns=(r.glossaryUrls||[]).map(url=>
+      `<a href="${esc(url)}" target="_blank" rel="noopener" class="gl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Quick Glossary</a>`
+    ).join('');
     const _board = r.board==='BOTH'?board:r.board;
     const _key = `${r.gradeNum}|${_board}|${r.subject}|${r.chapter}`;
     const _done = _doneSet.has(_key);
     const ea = s => String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
     const _keyAttr = _key.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
     const checkBtnHtml = `<button class="check-btn${_done?' done':''}" onclick="toggleDone(this,'${ea(_key)}','${ea(r.gradeNum)}','${ea(_board)}','${ea(r.subject)}','${ea(r.chapter)}')" aria-label="Mark complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>`;
-    return `<div class="ch-card${_done?' ch-done':''}" data-key="${_keyAttr}"><div class="ch-icon" style="background:${ic.bg}">${ic.em}</div><div class="ch-body"><div class="ch-name">${esc(r.chapter)}</div><div class="ch-btns">${btns}</div></div>${checkBtnHtml}${shareBtn(r)}</div>`;
+    return `<div class="ch-card${_done?' ch-done':''}" data-key="${_keyAttr}"><div class="ch-icon" style="background:${ic.bg}">${ic.em}</div><div class="ch-body"><div class="ch-name">${esc(r.chapter)}</div><div class="ch-btns">${btns}${iqBtns}${glBtns}</div></div>${checkBtnHtml}${shareBtn(r)}</div>`;
   }).join('');
   _refreshCards();
 }
