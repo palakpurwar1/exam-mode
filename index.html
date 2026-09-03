@@ -253,6 +253,7 @@ async function _initAuth(){
     if(!session){ await _SB.auth.signInAnonymously(); }
     const { data:{ user } } = await _SB.auth.getUser();
     _uid = user?.id ?? null;
+    console.log('[SB] auth uid:', _uid);
     if(_uid){ await _loadDone(); }
   } catch(e){ /* anonymous auth not enabled yet — localStorage keeps working */ }
 }
@@ -285,11 +286,13 @@ async function toggleDone(btn, key, gradeNum, boardVal, subjectVal, chapterVal){
     _doneSet.delete(key);
     card.classList.remove('ch-done'); btn.classList.remove('done');
     if(_uid) _SB.from('chapter_completions').delete()
-      .eq('user_id',_uid).eq('grade',gradeNum).eq('board',boardVal).eq('subject',subjectVal).eq('chapter',chapterVal);
+      .eq('user_id',_uid).eq('grade',gradeNum).eq('board',boardVal).eq('subject',subjectVal).eq('chapter',chapterVal)
+      .then(({error})=>{ if(error) console.error('[SB delete]',error); });
   } else {
     _doneSet.add(key);
     card.classList.add('ch-done'); btn.classList.add('done');
-    if(_uid) _SB.from('chapter_completions').insert({user_id:_uid,grade:gradeNum,board:boardVal,subject:subjectVal,chapter:chapterVal});
+    if(_uid) _SB.from('chapter_completions').insert({user_id:_uid,grade:gradeNum,board:boardVal,subject:subjectVal,chapter:chapterVal})
+      .then(({error})=>{ if(error) console.error('[SB insert]',error); else console.log('[SB] saved',chapterVal); });
   }
   _saveLs();
   _updateProgressBadge();
