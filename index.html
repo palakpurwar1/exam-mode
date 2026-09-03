@@ -37,6 +37,14 @@ a{color:#E05C14;text-decoration:none}
 .board-btn{flex:1;padding:6px 16px;border-radius:100px;font-size:11px;font-weight:800;color:#8C7A6B;transition:all .14s;text-align:center;white-space:nowrap;cursor:pointer}
 .board-btn.active{background:#E05C14;color:#fff;box-shadow:0 1px 6px rgba(224,92,20,.28)}
 
+/* Hero gradient */
+.hero-section{background:linear-gradient(to bottom,#FBDFC2 0%,#FEF0DC 45%,#FFFBF2 100%)}
+/* Hero feature pills */
+.hero-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;letter-spacing:.01em}
+.hero-pill-notes{background:rgba(224,92,20,.12);color:#C04E0B}
+.hero-pill-iq{background:rgba(147,51,234,.11);color:#7B2FBE}
+.hero-pill-gl{background:rgba(8,145,178,.11);color:#0771A0}
+
 /* Subject pills */
 .subj-btn{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:10px;font-size:12px;font-weight:800;background:#fff;border:2px solid #EFE4D4;color:#8C7A6B;transition:all .13s;cursor:pointer}
 .subj-btn.active{background:#FFF0E3;color:#E05C14;border-color:#E05C14}
@@ -161,13 +169,19 @@ a{color:#E05C14;text-decoration:none}
 <div class="max-w-[480px] mx-auto min-h-screen relative z-10 flex flex-col" id="shell">
 
   <!-- ── Hero ──────────────────────────────────────────────────────────── -->
-  <div class="px-4 md:px-12 pt-5 md:pt-12 pb-4 md:pb-9">
+  <div class="hero-section px-4 md:px-12 pt-5 md:pt-12 pb-8 md:pb-12">
     <div class="flex items-center gap-4 md:gap-10">
       <img src="Image.svg" alt="CuriousJr mascot" class="flex-shrink-0 md:order-last" style="height:clamp(80px,11vw,148px);width:auto">
       <div class="flex-1 min-w-0">
         <div class="text-[10px] md:text-[11px] font-extrabold tracking-[2px] uppercase text-[#E05C14] mb-2 md:mb-3">One stop for all things exams</div>
         <h1 class="text-[26px] md:text-[50px] font-black text-[#2C1E16] tracking-tight mb-2 md:mb-4 leading-[1.1]">Why exam fear?<br>When Curious<span style="color:#E05C14">Jr</span> is here! 📚</h1>
-        <p class="text-[12px] md:text-[16px] text-[#8C7A6B] font-semibold">Find last minute detailed revision material here</p>
+        <p class="text-[12px] md:text-[16px] text-[#8C7A6B] font-semibold mb-4 md:mb-5">Find last minute detailed revision material here</p>
+        <!-- What's inside each chapter -->
+        <div class="flex flex-wrap gap-2">
+          <span class="hero-pill hero-pill-notes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Chapter Notes</span>
+          <span class="hero-pill hero-pill-iq"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important Questions</span>
+          <span class="hero-pill hero-pill-gl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Quick Glossary</span>
+        </div>
       </div>
     </div>
   </div>
