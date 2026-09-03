@@ -38,7 +38,7 @@ a{color:#E05C14;text-decoration:none}
 .board-btn.active{background:#E05C14;color:#fff;box-shadow:0 1px 6px rgba(224,92,20,.28)}
 
 /* Hero gradient */
-.hero-section{background:linear-gradient(to bottom,#FBDFC2 0%,#FEF0DC 45%,#FFFBF2 100%)}
+.hero-section{background:linear-gradient(to bottom,#F5A06A 0%,#F8B884 30%,#FAD0A8 60%,#FDE8D0 82%,#FFFBF2 100%)}
 /* Hero feature pills */
 .hero-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;letter-spacing:.01em}
 .hero-pill-notes{background:rgba(224,92,20,.12);color:#C04E0B}
@@ -166,25 +166,24 @@ a{color:#E05C14;text-decoration:none}
   <ellipse cx="60" cy="56" rx="60" ry="20" fill="#FBDCBB"/><ellipse cx="40" cy="44" rx="33" ry="20" fill="#FDE6CC"/><ellipse cx="80" cy="40" rx="30" ry="20" fill="#FEEEDC"/>
 </svg>
 
-<div class="max-w-[480px] mx-auto min-h-screen relative z-10 flex flex-col" id="shell">
-
-  <!-- ── Hero ──────────────────────────────────────────────────────────── -->
-  <div class="hero-section px-4 md:px-12 pt-5 md:pt-12 pb-8 md:pb-12">
-    <div class="flex items-center gap-4 md:gap-10">
-      <img src="Image.svg" alt="CuriousJr mascot" class="flex-shrink-0 md:order-last" style="height:clamp(80px,11vw,148px);width:auto">
-      <div class="flex-1 min-w-0">
-        <div class="text-[10px] md:text-[11px] font-extrabold tracking-[2px] uppercase text-[#E05C14] mb-2 md:mb-3">One stop for all things exams</div>
-        <h1 class="text-[26px] md:text-[50px] font-black text-[#2C1E16] tracking-tight mb-2 md:mb-4 leading-[1.1]">Why exam fear?<br>When Curious<span style="color:#E05C14">Jr</span> is here! 📚</h1>
-        <p class="text-[12px] md:text-[16px] text-[#8C7A6B] font-semibold mb-4 md:mb-5">Find last minute detailed revision material here</p>
-        <!-- What's inside each chapter -->
-        <div class="flex flex-wrap gap-2">
-          <span class="hero-pill hero-pill-notes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Chapter Notes</span>
-          <span class="hero-pill hero-pill-iq"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important Questions</span>
-          <span class="hero-pill hero-pill-gl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Quick Glossary</span>
-        </div>
+<!-- ── Hero — full-width, outside shell ──────────────────────────────── -->
+<div class="hero-section relative z-10 px-4 md:px-12 pt-5 md:pt-12 pb-8 md:pb-12">
+  <div class="max-w-[480px] md:max-w-5xl mx-auto flex items-center gap-4 md:gap-10">
+    <img src="Image.svg" alt="CuriousJr mascot" class="flex-shrink-0 md:order-last" style="height:clamp(80px,11vw,160px);width:auto">
+    <div class="flex-1 min-w-0">
+      <div class="text-[10px] md:text-[11px] font-extrabold tracking-[2px] uppercase text-white/70 mb-2 md:mb-3">One stop for all things exams</div>
+      <h1 class="text-[26px] md:text-[52px] font-black text-[#2C1E16] tracking-tight mb-2 md:mb-4 leading-[1.1]">Why exam fear?<br>When Curious<span style="color:#E05C14">Jr</span> is here! 📚</h1>
+      <p class="text-[12px] md:text-[16px] text-[#5C2C0A]/60 font-semibold mb-4 md:mb-5">Find last minute detailed revision material here</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="hero-pill hero-pill-notes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span id="heroNoteCount"></span> Notes</span>
+        <span class="hero-pill hero-pill-iq"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Exam Important Questions</span>
+        <span class="hero-pill hero-pill-gl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Chapter Wise Summary</span>
       </div>
     </div>
   </div>
+</div>
+
+<div class="max-w-[480px] mx-auto min-h-screen relative z-10 flex flex-col" id="shell">
 
   <!-- ── Filters ────────────────────────────────────────────────────────── -->
   <div class="sticky top-0 z-50 bg-[#FFFBF2] px-4 md:px-12 pt-2 pb-3 flex flex-col gap-3 border-b border-[#EFE4D4]">
@@ -553,6 +552,7 @@ function iconFor(ch,subj){
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 function render(){
+  _updateHeroCount && _updateHeroCount();
   const filtered=DATA.filter(r=>{
     const base=r.gradeNum===grade&&(r.board==='BOTH'||r.board===board)&&r.subject===subject;
     if(!base) return false;
@@ -593,9 +593,18 @@ function render(){
 }
 
 
+function _updateHeroCount(){
+  const el = document.getElementById('heroNoteCount');
+  if(!el) return;
+  // Count distinct chapters for current grade + board (or total if no specific selection)
+  const count = DATA.filter(r => r.gradeNum===grade && (r.board==='BOTH'||r.board===board)).length;
+  el.textContent = count || DATA.length;
+}
+
 buildBoardToggle();
 buildSubjectTabs();
 render();
+_updateHeroCount();
 </script>
 
 </body>
