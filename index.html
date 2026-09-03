@@ -62,6 +62,13 @@ a{color:#E05C14;text-decoration:none}
 .share-btn{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:none;border:1.5px solid #EFE4D4;color:#8C7A6B;cursor:pointer;transition:all .13s;flex-shrink:0;align-self:center}
 .share-btn:hover{border-color:#E05C14;color:#E05C14;background:#FFF0E3}
 .share-btn svg{width:13px;height:13px}
+.check-btn{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:none;border:2px solid #EFE4D4;color:#C8B8A8;cursor:pointer;transition:all .15s;flex-shrink:0;align-self:center}
+.check-btn:hover{border-color:#64A338;color:#64A338}
+.check-btn.done{border-color:#64A338;background:#64A338;color:#fff}
+.check-btn svg{width:14px;height:14px}
+.ch-card.ch-done{border-color:#A8D48A;background:#F6FCF0}
+.ch-card.ch-done .ch-name{color:#3A6B1E}
+.progress-badge{font-size:11px;font-weight:700;color:#64A338;background:#EDF7E6;border-radius:100px;padding:2px 10px;margin-left:8px}
 
 /* Search */
 .search-wrap{overflow:hidden;max-height:0;transition:max-height .2s,padding .2s}
@@ -179,7 +186,7 @@ a{color:#E05C14;text-decoration:none}
 
   <!-- ── Results header ────────────────────────────────────────────────── -->
   <div class="flex items-center justify-between px-4 md:px-12 pt-5 pb-2.5">
-    <span class="text-[15px] font-extrabold text-[#2C1E16]" id="resultsTitle">Chapters</span>
+    <span class="flex items-center"><span class="text-[15px] font-extrabold text-[#2C1E16]" id="resultsTitle">Chapters</span><span class="progress-badge" id="progressBadge" style="display:none"></span></span>
     <button class="search-toggle" id="searchToggle" onclick="toggleSearch()" aria-label="Search chapters">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
@@ -200,9 +207,69 @@ a{color:#E05C14;text-decoration:none}
   <span style="font-size:13px;font-weight:800;letter-spacing:.1px">Connect with Mentor</span>
 </a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="data.js"></script>
 <script>
 
+
+// ── Supabase completion tracking ─────────────────────────────────────────
+const _SB = supabase.createClient(
+  'https://mxeprprgfebxzruwewge.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im14ZXBycHJnZmVieHpydXdld2dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MTc5NDksImV4cCI6MjEwMzk5Mzk0OX0.d-6BUrjvEs5bGE1CvM68Om-DNorJ0nP25kumDa_SZv4'
+);
+let _doneSet = new Set(); // 'grade|board|subject|chapter'
+let _uid = null;
+
+async function _initAuth(){
+  let { data:{ session } } = await _SB.auth.getSession();
+  if(!session){ await _SB.auth.signInAnonymously(); }
+  const { data:{ user } } = await _SB.auth.getUser();
+  _uid = user?.id;
+  if(_uid){ await _loadDone(); }
+}
+
+async function _loadDone(){
+  const { data } = await _SB.from('chapter_completions')
+    .select('grade,board,subject,chapter');
+  _doneSet = new Set((data||[]).map(r=>`${r.grade}|${r.board}|${r.subject}|${r.chapter}`));
+  // Refresh visual state on rendered cards
+  document.querySelectorAll('.ch-card[data-key]').forEach(card=>{
+    const done = _doneSet.has(card.dataset.key);
+    card.classList.toggle('ch-done', done);
+    const btn = card.querySelector('.check-btn');
+    if(btn) btn.classList.toggle('done', done);
+  });
+  _updateProgressBadge();
+}
+
+async function toggleDone(btn, key, gradeNum, boardVal, subjectVal, chapterVal){
+  if(!_uid) return;
+  const card = btn.closest('.ch-card');
+  const wasDone = _doneSet.has(key);
+  if(wasDone){
+    _doneSet.delete(key);
+    card.classList.remove('ch-done'); btn.classList.remove('done');
+    await _SB.from('chapter_completions').delete()
+      .eq('grade',gradeNum).eq('board',boardVal).eq('subject',subjectVal).eq('chapter',chapterVal);
+  } else {
+    _doneSet.add(key);
+    card.classList.add('ch-done'); btn.classList.add('done');
+    await _SB.from('chapter_completions').insert({grade:gradeNum,board:boardVal,subject:subjectVal,chapter:chapterVal});
+  }
+  _updateProgressBadge();
+}
+
+function _updateProgressBadge(){
+  const badge = document.getElementById('progressBadge');
+  if(!badge) return;
+  // Count done chapters matching current view (grade + board)
+  const total = document.querySelectorAll('.ch-card[data-key]').length;
+  const done = document.querySelectorAll('.ch-card.ch-done').length;
+  badge.textContent = done > 0 ? done+'/'+total+' done' : '';
+  badge.style.display = done > 0 ? '' : 'none';
+}
+
+_initAuth();
 
 const SUBJ_META = {
   Mathematics:{icon:'➗',label:'Maths'},
@@ -438,14 +505,13 @@ function render(){
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+
         label+'</a>';
     }).join('');
-    return '<div class="ch-card">'+
-      '<div class="ch-icon" style="background:'+ic.bg+'">'+ic.em+'</div>'+
-      '<div class="ch-body">'+
-        '<div class="ch-name">'+esc(r.chapter)+'</div>'+
-        '<div class="ch-btns">'+btns+'</div>'+
-      '</div>'+
-      shareBtn(r)+
-    '</div>';
+    const _board = r.board==='BOTH'?board:r.board;
+    const _key = `${r.gradeNum}|${_board}|${r.subject}|${r.chapter}`;
+    const _done = _doneSet.has(_key);
+    const ea = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    const _keyAttr = _key.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    const checkBtnHtml = `<button class="check-btn${_done?' done':''}" onclick="toggleDone(this,'${ea(_key)}','${ea(r.gradeNum)}','${ea(_board)}','${ea(r.subject)}','${ea(r.chapter)}')" aria-label="Mark complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>`;
+    return `<div class="ch-card${_done?' ch-done':''}" data-key="${_keyAttr}"><div class="ch-icon" style="background:${ic.bg}">${ic.em}</div><div class="ch-body"><div class="ch-name">${esc(r.chapter)}</div><div class="ch-btns">${btns}</div></div>${checkBtnHtml}${shareBtn(r)}</div>`;
   }).join('');
 }
 
